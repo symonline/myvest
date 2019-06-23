@@ -1,0 +1,21 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+Login
+{% end block %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static',filename='signin.css')}}">
+{% end block %}
+
+{% block title %}
+    <div class="">
+          <form class="">
+              <h2 class="">PLEASE SIGN IN</h2>
+              {{form.}}
+              {{wtf.}}
+          </form>
+    </div>
+{% end block %}

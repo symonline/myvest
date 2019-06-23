@@ -1,0 +1,58 @@
+There are 3 models class, with these relationships :
+
+The class A and B have one-to-one relationship
+The class B and C have many(B)-to-one(C) relationship
+The class A and C have many(C)-to-one(A) relationship
+And now I want to create a relationship between C and A passing though B relationship (abstract problem formulation, continue the reading for the concrete formulation)
+
+The documentation speaks about join, it might be a way to do it, but I'm not able to understand the example https://docs.sqlalchemy.org/en/13/orm/join_conditions.html#composite-secondary-joins
+
+from backend import db # db = SQLAlchemy(app)
+$ A & B one to one Relationship
+
+class User(db.Model): # class A
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    contacts = db.relationship('ContactDetails', backref='user_contact')
+    portfolio = db.relationship('Portfolio', backref='client')
+    running_investment = db.relationship('Investment', backref='investment_plan')
+
+
+class ContactDetails(db.Model): # class D
+    __tablename__ = 'contact_details'
+
+    id = db.Column(db.Integer, primary_key=True)
+    investments = db.relationship('', backref='portfolio')
+    client_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Portfolio(db.Model): # class B
+    __tablename__ = 'portfolio'
+
+    id = db.Column(db.Integer, primary_key=True)
+    investments = db.relationship('Investment', backref='portfolio')
+    client_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Investment(db.Model): # class C
+    __tablename__ = 'investment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    rates = db.relationship('Rates', backref='investment')
+
+
+class Rates(db.Model): # class E
+    __tablename__ = 'rates'
+
+    id = db.Column(db.Integer, primary_key=True)
+    investment_product = db.Column(db.Integer, db.ForeignKey('investment.id'))
+
+
+class InvestmentManager(db.Model): # class F
+    __tablename__ = 'investment_manager'
+
+    id = db.Column(db.Integer, primary_key=True)
+    investment = db.Column(db.Integer, db.ForeignKey('investment.id'))
